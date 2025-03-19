@@ -12,13 +12,15 @@ function App() {
   const [notes, setNotes] = useState([]);
 
   useEffect(() => {
-    fetchNotes();
+    fetchNotes(); // Fetch notes when the app loads
   }, []);
 
   const fetchNotes = async () => {
     try {
+      console.log("Fetching notes..."); // Debugging statement
       const response = await fetch('http://localhost:5042/notes');
       const data = await response.json();
+      console.log("Fetched notes:", data); // Debugging statement
       setNotes(data);
     } catch (error) {
       console.error('Error fetching notes:', error);
@@ -32,11 +34,11 @@ function App() {
           <Route path="/" element={<Notes notes={notes} />} />
           <Route
             path="/create-note"
-            element={<CreateNote setNotes={setNotes} />}
+            element={<CreateNote setNotes={setNotes} fetchNotes={fetchNotes} />}
           />
           <Route
             path="/edit-note/:id"
-            element={<EditNote notes={notes} setNotes={setNotes} />}
+            element={<EditNote notes={notes} setNotes={setNotes} fetchNotes={fetchNotes} />}
           />
         </Routes>
       </Router>

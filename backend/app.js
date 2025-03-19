@@ -13,15 +13,21 @@ const notesFilePath = path.join(__dirname, 'notes.json');
 app.use(cors());
 app.use(express.json());
 
-let notes = [
-    { id: 0, title: 'Grocery List', content: 'Milk, eggs, bread' },
-    { id: 1, title: 'Meeting Notes', content: 'Discussed project deadlines' },
-    { id: 2, title: 'Ideas', content: 'New app features' }
-];
+// Helper function to read notes from the JSON file
+const readNotesFromFile = () => {
+    if (!fs.existsSync(notesFilePath)) {
+        fs.writeFileSync(notesFilePath, JSON.stringify([], null, 2));
+    }
+    const data = fs.readFileSync(notesFilePath, 'utf-8');
+    console.log("Reading notes from file:", data); // Debugging statement
+    return JSON.parse(data);
+};
+
 
 // Helper function to write notes to the JSON file
 const writeNotesToFile = (notes) => {
     fs.writeFileSync(notesFilePath, JSON.stringify(notes, null, 2));
+    console.log("Updated notes written to file:", JSON.stringify(notes, null, 2)); // Debugging statement
 };
 
 /**
@@ -37,6 +43,7 @@ const writeNotesToFile = (notes) => {
  * @returns {Object} 404 - Error message if the note is not found
  */
 app.get('/notes/:id?', (req, res) => {
+    const notes = readNotesFromFile();
     const { id } = req.params;
 
     if (id) {
@@ -62,6 +69,7 @@ app.get('/notes/:id?', (req, res) => {
  * @returns {Object} 400 - Error message if title or content is missing
  */
 app.post('/notes', (req, res) => {
+    const notes = readNotesFromFile();
     const { title, content } = req.body;
     if (!title || !content) {
         return res.status(400).json({ error: 'Title and content are required' });
@@ -90,6 +98,7 @@ app.post('/notes', (req, res) => {
  * @returns {Object} 404 - Error message if the note is not found
  */
 app.put('/notes/:id', (req, res) => {
+    const notes = readNotesFromFile();
     const { id } = req.params;
     const { title, content } = req.body;
 
@@ -118,12 +127,14 @@ app.put('/notes/:id', (req, res) => {
  * @returns {Object} 404 - Error message if the note is not found
  */
 app.delete('/notes/:id', (req, res) => {
+    const notes = readNotesFromFile();
     const { id } = req.params;
     const noteIndex = notes.findIndex(note => note.id === parseInt(id));
     if (noteIndex === -1) {
         return res.status(404).json({ error: 'Note not found' });
     }
     const deletedNote = notes.splice(noteIndex, 1);
+    writeNotesToFile(notes);
     res.json(deletedNote[0]);
 });
 
