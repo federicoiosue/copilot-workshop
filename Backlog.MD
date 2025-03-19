@@ -1,4 +1,4 @@
-## Backlog 1: Notes CRUD Operations
+## Feature 1: Notes CRUD Operations
 
 **Description:**
 - **As a** user,
@@ -37,7 +37,7 @@
    - README should include setup instructions and CRUD API endpoints documentation.
    - Code should include inline comments for complex logic.
 
-## Backlog 2
+## Feature 2
 
 **Description:**
 - **As a** user,
@@ -66,7 +66,7 @@
    - Create user documentation explaining how to use and manage categories.
    - Add comments to category-related components explaining their functionality.
 
-## Backlog 3: Search Functionality
+## Feature 3: Search Functionality
 
 **Description:**
 - **As a** user,
