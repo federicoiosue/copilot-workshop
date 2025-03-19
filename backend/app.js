@@ -36,25 +36,40 @@ const writeNotesToFile = (notes) => {
  * Prompt 1: Please scaffold the GET note part
  * Prompt 2: I need to add a parameter to the get request in order to get specific notes by id
  * Prompt 3: The id should be an optional parameter so I can still get all of the notes
+ * Prompt 4: I need to add a query parameter to the get request in order to filter notes by title
  * 
  * @route GET /notes/:id?
  * @param {number} [req.params.id] - The optional ID of the note to retrieve
+ * @param {string} [req.query.title] - The title to filter notes by
+ * @param {string} [req.query.content] - The content to filter notes by
  * @returns {Array<Object>|Object} 200 - An array of notes or a single note
  * @returns {Object} 404 - Error message if the note is not found
  */
 app.get('/notes/:id?', (req, res) => {
     const notes = readNotesFromFile();
     const { id } = req.params;
+    const { title, content } = req.query;
 
     if (id) {
         const note = notes.find(note => note.id === parseInt(id));
         if (!note) {
             return res.status(404).json({ error: 'Note not found' });
         }
-        return res.json(note);
     }
-
-    res.json(notes);
+    // Filter notes by title or content if query parameters are provided
+    let filteredNotes = notes;
+    if (title) {
+        filteredNotes = filteredNotes.filter(note => 
+            note.title.toLowerCase().includes(title.toLowerCase())
+        );
+    }
+    if (content) {
+        filteredNotes = filteredNotes.filter(note => 
+            note.content.toLowerCase().includes(content.toLowerCase())
+        );
+    }
+    
+    return res.json(filteredNotes);
 });
 
 /**

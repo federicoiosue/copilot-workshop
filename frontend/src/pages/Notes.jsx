@@ -13,6 +13,29 @@ import NoteItem from "../components/NoteItem.jsx";
  * @param {Array} notes - Array of note objects containing title and content
  */
 const Notes = ({ notes }) => {
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // useEffect(() => {
+  //   fetchNotes(); // Refresh notes whenever this component is rendered
+  // }, [fetchNotes]);
+
+  const handleSearch = async () => {
+    try {
+      const response = await fetch(
+        `/notes?title=${encodeURIComponent(searchQuery)}`
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch notes");
+      }
+      else {
+        const filteredNotes = await response.json();
+        setSearchResults(filteredNotes);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <section className="lg:w-[80%] lg:p-10 h-[screen-4%] lg:gap-4 md:w-[90%] md:h-[90%] md:p-4 md:gap-3 flex justify-between items-center flex-col bg-[#171616] rounded-[12px] sm:w-[90%] sm:h-[90%] sm:p-3 sm:gap-3 w-full h-full p-2 gap-3">
       <header
