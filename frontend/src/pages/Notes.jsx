@@ -20,7 +20,7 @@ const Notes = ({ notes }) => {
         className="notes_header lg:mb-3 h-[60px] w-full bg-[#1e1c1c] flex justify-between items-center pl-2 border-[1px] border-[#ffffff0a] border-solid"
       >
           <h2 className="text-[28px] text-white ml-5 font-['Poppu']">
-            My Notes
+            Out Copilot Notes App
           </h2>
         {/* Impliment search functionality here */}
       </header>

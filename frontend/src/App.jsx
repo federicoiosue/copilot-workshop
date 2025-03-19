@@ -17,7 +17,7 @@ function App() {
 
   const fetchNotes = async () => {
     try {
-      const response = await fetch('http://localhost:5000/notes');
+      const response = await fetch('http://localhost:5042/notes');
       const data = await response.json();
       setNotes(data);
     } catch (error) {
